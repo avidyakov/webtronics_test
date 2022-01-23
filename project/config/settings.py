@@ -19,6 +19,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_yasg',
 
     'user_app.apps.UserAppConfig',
     'post_app.apps.PostAppConfig',
