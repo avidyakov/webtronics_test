@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
   web:
-    restart: unless-stopped
+    restart: always
     build:
       context: .
       dockerfile: ./Dockerfile
