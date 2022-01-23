@@ -1,19 +1,17 @@
 from rest_framework import serializers
+from rest_framework.fields import CurrentUserDefault
 
-from user_app.models import User
 from .models import Post
 
 
-class AuthorSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ('id', 'first_name', 'last_name')
-
-
 class PostSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)
+
+    def create(self, validated_data):
+        post = super().create(validated_data)
+        post.author = CurrentUserDefault()
+        post.save()
+        return post
 
     class Meta:
         model = Post
-        fields = ('id', 'title', 'description', 'author')
+        fields = ('id', 'title', 'description')
