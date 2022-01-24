@@ -7,5 +7,5 @@ from .serializers import RegisterSerializer
 
 class UserCreateAPIView(CreateAPIView):
     queryset = get_user_model().objects.all()
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer

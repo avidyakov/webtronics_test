@@ -12,7 +12,7 @@ from .serializers import PostSerializer
 class PostViewSet(mixins.CreateModelMixin, GenericViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
     @action(detail=True, methods=['post'])
     def like(self, request, pk=None):

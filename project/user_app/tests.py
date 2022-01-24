@@ -17,4 +17,3 @@ def test_user_signup(session, url):
         'username': person.username()
     })
     assert response.status_code == HTTPStatus.CREATED
-
