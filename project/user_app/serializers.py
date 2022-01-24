@@ -3,27 +3,28 @@ from http import HTTPStatus
 
 import requests
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from furl import furl
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import User
-
 logger = logging.getLogger(__name__)
+
+user_model = get_user_model()
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())]
+        validators=[UniqueValidator(queryset=user_model.objects.all())]
     )
 
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
-        model = User
+        model = user_model
         fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name')
         extra_kwargs = {
             'first_name': {'required': True},
@@ -53,7 +54,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        user = User.objects.create(
+        user = user_model.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
             first_name=validated_data['first_name'],
