@@ -1,8 +1,16 @@
+import logging
+from http import HTTPStatus
+
+import requests
+from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
+from furl import furl
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from .models import User
+
+logger = logging.getLogger(__name__)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -27,6 +35,22 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'password': 'Password fields didn\'t match.'})
 
         return attrs
+
+    def validate_email(self, value):
+        if not settings.EMAIL_VERIFICATION:
+            return value
+
+        response = requests.get(furl(settings.EMAIL_HUNTER_URL).add({
+            'api_key': settings.EMAIL_HUNTER_KEY,
+            'email': value
+        }).url)
+
+        logger.info(f'Email hunter response status code: {response.status_code}')
+
+        if response.status_code == HTTPStatus.OK and response.json()['data']['result'] == 'undeliverable':
+            raise serializers.ValidationError('Undeliverable email')
+
+        return value
 
     def create(self, validated_data):
         user = User.objects.create(

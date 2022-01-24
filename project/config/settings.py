@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
+    'django_extensions',
 
     'user_app.apps.UserAppConfig',
     'post_app.apps.PostAppConfig',
@@ -95,8 +96,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user_app.User'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+EMAIL_VERIFICATION = int(os.environ['EMAIL_VERIFICATION'])
+
+EMAIL_HUNTER_KEY = os.environ['EMAIL_HUNTER_KEY']
+
+EMAIL_HUNTER_URL = 'https://api.hunter.io/v2/email-verifier'
