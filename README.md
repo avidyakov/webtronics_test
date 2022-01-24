@@ -43,3 +43,11 @@ docker compose exec web python manage.py createsuperuser --noinput
 переменные в .env:
 1. EMAIL_VERIFICATION замените на 1
 2. EMAIL_HUNTER_KEY введите api_key из личного кабинета hunter.io
+
+## Tests
+
+Чтобы запустить тесты, воспользуйтесь командой
+
+```bash
+docker compose exec web pytest
+```
