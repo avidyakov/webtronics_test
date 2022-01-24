@@ -11,13 +11,13 @@ cat .env.temp > .env
 docker compose up --build
 ```
 
-После успешного запуска сервера выполните
+После успешного запуска сервера, выполните
 
 ```bash
 docker compose exec web python manage.py migrate
 ```
 
-Последующие запуски
+Следующие запуски
 
 ```bash
 docker compose up
